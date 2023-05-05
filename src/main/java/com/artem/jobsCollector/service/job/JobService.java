@@ -13,6 +13,6 @@ public interface JobService {
 
     List<String> findAllSlugs();
 
-    void deleteBySlugs(List<String> slugs);
+    void deleteAllBySlugs(List<String> slugs);
 
 }

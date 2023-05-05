@@ -4,7 +4,6 @@ import com.artem.jobsCollector.entity.Job;
 import com.artem.jobsCollector.generatedClass.Datum;
 import com.artem.jobsCollector.generatedClass.JobsInfo;
 import com.artem.jobsCollector.mapper.JobMapper;
-import com.artem.jobsCollector.repository.JobRepository;
 import com.artem.jobsCollector.service.job.JobService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +36,6 @@ public class JobCollector {
     private final JobMapper jobMapper;
     private final ObjectMapper objectMapper;
     private final OkHttpClient client;
-    private final JobRepository jobRepository;
 
     @Transactional
     public void collectJobs() {
@@ -57,7 +55,7 @@ public class JobCollector {
 
     private void deleteDeprecatedJobs(List<String> slugsFromDbToDelete, List<String> jobSlugs) {
         slugsFromDbToDelete.removeAll(jobSlugs);
-        jobService.deleteBySlugs(slugsFromDbToDelete);
+        jobService.deleteAllBySlugs(slugsFromDbToDelete);
     }
 
     private List<Datum> getJobsDTOFromAPI() {

@@ -51,7 +51,7 @@ public class JobCollectorTest {
         jobCollector.collectJobs();
 
         inOrder.verify(jobService).findAllSlugs();
-        inOrder.verify(jobService).deleteBySlugs(anyList());
+        inOrder.verify(jobService).deleteAllBySlugs(anyList());
         inOrder.verify(jobService).saveAll(jobs);
     }
 }

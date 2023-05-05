@@ -38,7 +38,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public void deleteBySlugs(List<String> slugs) {
-        slugs.forEach(jobRepository::deleteBySlug);
+    public void deleteAllBySlugs(List<String> slugs) {
+        jobRepository.deleteAllBySlugsSafe(slugs);
     }
 }
