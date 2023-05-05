@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "company_name": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "remote": {
+            "type": "boolean"
+          },
+          "url": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "job_types": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "location": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "slug",
+          "company_name",
+          "title",
+          "remote",
+          "url",
+          "tags",
+          "job_types",
+          "location",
+          "created_at"
+        ]
+      }
+    }
+  },
+  "required": [
+    "data"
+  ]
+}
