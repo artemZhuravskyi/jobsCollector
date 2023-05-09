@@ -15,6 +15,8 @@ import java.util.Optional;
 public class JobServiceImpl implements JobService {
 
     private static final int PAGE_SIZE = 25;
+    private static final int TOP_JOBS_PAGE_SIZE = 10;
+    private static final int FIRST_PAGE = 0;
 
     private final JobRepository jobRepository;
 
@@ -28,17 +30,24 @@ public class JobServiceImpl implements JobService {
         if (page.isPresent()) {
             page = Optional.of(page.get() - 1);
         }
-        return jobRepository.findAll(PageRequest.of(page.orElse(0), PAGE_SIZE,
-                Sort.Direction.ASC, sortBy.orElse("createdAt"))).getContent();
+        List<Job> sortedJobs = jobRepository.findAll(PageRequest.of(page.orElse(FIRST_PAGE), PAGE_SIZE,
+                Sort.Direction.DESC, sortBy.orElse("createdAt"))).getContent();
+        sortedJobs.forEach(job -> job.setViews(job.getViews() + 1));
+        saveAll(sortedJobs);
+        return sortedJobs;
     }
-
-    @Override
-    public List<String> findAllSlugs() {
-        return jobRepository.findAllJobSlugs();
+    public List<Job> findTop10ByViews() {
+        return jobRepository.findAll(PageRequest.of(FIRST_PAGE, TOP_JOBS_PAGE_SIZE,
+                Sort.Direction.DESC, "views")).getContent();
     }
 
     @Override
     public void deleteAllBySlugs(List<String> slugs) {
         jobRepository.deleteAllBySlugsSafe(slugs);
+    }
+
+    @Override
+    public List<Job> findAll() {
+        return jobRepository.findAll();
     }
 }

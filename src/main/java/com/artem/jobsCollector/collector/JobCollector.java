@@ -19,6 +19,7 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -39,11 +40,13 @@ public class JobCollector {
 
     @Transactional
     public void collectJobs() {
-        List<String> slugsFromDbToDelete = new ArrayList<>(jobService.findAllSlugs());
+        List<Job> jobsFromDb = jobService.findAll();
+        List<String> slugsFromDbToDelete = jobsFromDb.stream().map(Job::getSlug).collect(Collectors.toCollection(ArrayList::new));
 
         List<Datum> jobsDTO = getJobsDTOFromAPI();
 
-        List<Job> jobsToSave = jobMapper.jobsDTOToJobs(jobsDTO);
+        List<Job> jobsToSave = jobMapper.jobsDTOToJobs(jobsDTO, jobsFromDb);
+
         List<String> jobSlugs = jobsToSave.stream().map(Job::getSlug).toList();
 
         deleteDeprecatedJobs(slugsFromDbToDelete, jobSlugs);

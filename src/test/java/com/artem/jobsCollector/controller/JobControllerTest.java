@@ -41,8 +41,8 @@ public class JobControllerTest {
         List<Job> jobs = new ArrayList<>();
         company = new Company("ATB");
         location = new Location("Jitomir", jobs);
-        jobs.add(new Job("slug 1", company, location, "Job 1", false, 123456));
-        jobs.add(new Job("slug 2", company, location, "Job 2", true, 123457));
+        jobs.add(new Job("slug 1", company, location, "Job 1", false, 123456, 832));
+        jobs.add(new Job("slug 2", company, location, "Job 2", true, 123457, 723));
         when(jobService.findAllSorted(any(Optional.class), any(Optional.class))).thenReturn(jobs);
         mockMvc = MockMvcBuilders.standaloneSetup(jobController).build();
     }
@@ -58,13 +58,15 @@ public class JobControllerTest {
                 .andExpect(jsonPath("$[0].createdAt").value(123456))
                 .andExpect(jsonPath("$[0].location.city").value(location.getCity()))
                 .andExpect(jsonPath("$[0].company.name").value(company.getName()))
+                .andExpect(jsonPath("$[0].views").value(832))
 
                 .andExpect(jsonPath("$[1].slug").value("slug 2"))
                 .andExpect(jsonPath("$[1].title").value("Job 2"))
                 .andExpect(jsonPath("$[1].remote").value(true))
                 .andExpect(jsonPath("$[1].createdAt").value(123457))
                 .andExpect(jsonPath("$[1].location.city").value(location.getCity()))
-                .andExpect(jsonPath("$[1].company.name").value(company.getName()));
+                .andExpect(jsonPath("$[1].company.name").value(company.getName()))
+                .andExpect(jsonPath("$[1].views").value(723));
     }
 
     @Test

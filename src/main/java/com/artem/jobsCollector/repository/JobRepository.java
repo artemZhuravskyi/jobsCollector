@@ -13,9 +13,6 @@ import java.util.List;
 @Repository
 public interface JobRepository extends JpaRepository<Job, Integer> {
 
-    @Query("SELECT slug FROM Job")
-    List<String> findAllJobSlugs();
-
     @Transactional
     @Modifying
     @Query("DELETE FROM Job j WHERE j.slug IN :slugs")

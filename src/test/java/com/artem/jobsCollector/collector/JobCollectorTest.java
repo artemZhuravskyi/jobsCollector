@@ -41,7 +41,7 @@ public class JobCollectorTest {
         jobs.add(job2);
 
 
-        when(jobMapper.jobsDTOToJobs(anyList())).thenReturn(jobs);
+        when(jobMapper.jobsDTOToJobs(anyList(), anyList())).thenReturn(jobs);
     }
 
     @Test
@@ -50,7 +50,7 @@ public class JobCollectorTest {
 
         jobCollector.collectJobs();
 
-        inOrder.verify(jobService).findAllSlugs();
+        inOrder.verify(jobService).findAll();
         inOrder.verify(jobService).deleteAllBySlugs(anyList());
         inOrder.verify(jobService).saveAll(jobs);
     }

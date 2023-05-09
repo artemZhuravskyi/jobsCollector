@@ -40,6 +40,9 @@
           "location": {
             "type": "string"
           },
+          "views": {
+            "type": "integer"
+          },
           "created_at": {
             "type": "integer"
           }

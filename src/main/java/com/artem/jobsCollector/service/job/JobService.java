@@ -11,8 +11,9 @@ public interface JobService {
 
     List<Job> findAllSorted(Optional<Integer> page, Optional<String> sortBy);
 
-    List<String> findAllSlugs();
+    List<Job> findTop10ByViews();
 
     void deleteAllBySlugs(List<String> slugs);
 
+    List<Job> findAll();
 }

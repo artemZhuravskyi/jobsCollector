@@ -18,18 +18,23 @@ public interface JobMapper {
     @Mapping(target = "location", source = "location")
     Job jobDTOToJob(Datum jobDTO, Company company, Location location);
 
-    default List<Job> jobsDTOToJobs(List<Datum> jobsDTO) {
+    default List<Job> jobsDTOToJobs(List<Datum> jobsDTO, List<Job> jobsFromDb) {
         List<Job> jobs = new ArrayList<>();
         List<Company> companies = jobsDTOToCompanies(jobsDTO);
         List<Location> locations = jobsDTOToLocations(jobsDTO);
-
-        jobsDTO.forEach(jobDTO -> {
-            Company company = companies.stream().filter(comp -> isEquals(jobDTO, comp)).findFirst().get();
-            Location location = locations.stream().filter(loc -> isEquals(jobDTO, loc)).findFirst().get();
-            jobs.add(jobDTOToJob(jobDTO, company, location));
-        });
+        jobsDTO.forEach(jobDTO -> createJobFromDTO(jobsFromDb, jobs, companies, locations, jobDTO));
 
         return jobs;
+    }
+
+    private void createJobFromDTO(List<Job> jobsFromDb, List<Job> jobs, List<Company> companies, List<Location> locations, Datum jobDTO) {
+        Company company = companies.stream().filter(comp -> isEquals(jobDTO, comp)).findFirst().get();
+        Location location = locations.stream().filter(loc -> isEquals(jobDTO, loc)).findFirst().get();
+        jobsFromDb.parallelStream()
+                .filter(job -> job.getSlug().equals(jobDTO.getSlug()))
+                .findFirst()
+                .ifPresent(job -> jobDTO.setViews(job.getViews()));
+        jobs.add(jobDTOToJob(jobDTO, company, location));
     }
 
     private boolean isEquals(Datum jobDTO, Location loc) {

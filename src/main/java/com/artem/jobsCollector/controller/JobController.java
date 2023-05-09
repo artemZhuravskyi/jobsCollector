@@ -24,4 +24,9 @@ public class JobController {
         return jobService.findAllSorted(page, sortBy);
     }
 
+    @GetMapping("/top-10")
+    public List<Job> getTop10ByViews(){
+        return jobService.findTop10ByViews();
+    }
+
 }

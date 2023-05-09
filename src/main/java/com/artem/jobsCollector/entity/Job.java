@@ -33,4 +33,5 @@ public class Job {
     private String title;
     private boolean remote;
     private int createdAt;
+    private int views;
 }
